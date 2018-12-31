@@ -1,4 +1,8 @@
 class TicTacToe
+  def initialize(board = Array.new(9, " "))
+    @board = board
+  end
+  
   WIN_COMBINATIONS = [
     [0,1,2],  # Top row
     [3,4,5],  # Middle row
@@ -9,10 +13,6 @@ class TicTacToe
     [0,4,8],  # Left to right
     [2,4,6]   # Right to left
   ]
-  
-  def initialize(board = Array.new(9, " "))
-    @board = board
-  end
   
   def display_board
     puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
@@ -43,11 +43,11 @@ class TicTacToe
     input = gets.strip
     index = input_to_index(input)
     
-    if valid_move?(@board, index)
-      move(@board, index, current_player(@board))
+    if valid_move?(index)
+      move(index, current_player)
       display_board(@board)
     else
-      turn(@board)
+      turn
     end
     
   end
@@ -61,7 +61,7 @@ class TicTacToe
   end
 
   def current_player
-    turn_count( @board ) %  2 == 0 ? "X" : "O"
+    turn_count.even? ? "X" : "O"
   end
 
   def won?
@@ -73,15 +73,15 @@ class TicTacToe
   end
   
   def draw?
-    full?( @board ) && !won?( @board )
+    full? && !won?
   end
 
   def over?
-    won?(@board) || draw?(@board) || full?(@board)
+    won?|| draw? || full?
   end
 
   def winner
-    if win_combination = won?(@board)
+    if win_combination = won?
       @board[win_combination[0]]
     end
   end
@@ -91,11 +91,11 @@ class TicTacToe
     
     while counter < 9
       break if over?
-      turn(@board)
+      turn
       counter += 1
     end
     
-    puts "Congratulations #{winner(@board)}!" if won?(@board)
-    puts "Cat's Game!" if draw?(@board)
+    puts "Congratulations #{winner}!" if won?
+    puts "Cat's Game!" if draw?
   end
 end
